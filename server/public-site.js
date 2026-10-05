@@ -1,0 +1,17 @@
+import { clinicSite as legacyClinicSite } from './clinic-design.js';
+import { renderTemplate } from './templates.js';
+import { escapeHtml } from './security.js';
+import { clinicOpeningHours } from '../shared/operating-hours.js';
+
+function withTimeChoices(html, clinic) {
+  const hours = escapeHtml(JSON.stringify(clinicOpeningHours(JSON.parse(clinic.data))));
+  const decorated = html.replace('id="booking"', `id="booking" data-hours="${hours}"`);
+  const timeInput = '<label>Preferred time<input name="preferredTime" type="time"></label>';
+  const timeSelect = '<label>Preferred time<select name="preferredTime" required><option value="">Choose a date first</option></select></label>';
+  if (decorated.includes(timeInput)) return decorated.replace(timeInput, timeSelect);
+  return decorated.replace('<label>Preferred date<input name="preferredDate" type="date" required></label>', `<label>Preferred date<input name="preferredDate" type="date" required></label>${timeSelect}`);
+}
+export function clinicSite(clinic, preview=false, detail=null) {
+  return withTimeChoices(JSON.parse(clinic.data).website ? renderTemplate(clinic, preview, detail) : legacyClinicSite(clinic, preview), clinic);
+}
+export const bookingScript = `const form=document.querySelector('#booking');if(form){const date=form.querySelector('[name=preferredDate]'),time=form.querySelector('[name=preferredTime]'),result=document.querySelector('#result');let hours=[];try{hours=JSON.parse(form.dataset.hours||'[]')}catch{}const ist=()=>new Date(Date.now()+19800000).toISOString().slice(0,16);date.min=ist().slice(0,10);function updateSlots(){const chosen=date.value;time.replaceChildren();const placeholder=document.createElement('option');placeholder.value='';placeholder.textContent=chosen?'Choose a preferred time':'Choose a date first';time.append(placeholder);if(!chosen)return;const weekday=(new Date(chosen+'T12:00:00Z').getUTCDay()+6)%7,day=hours.find(row=>row.day===weekday);if(day&&!day.closed){const [oh,om]=day.open.split(':').map(Number),[ch,cm]=day.close.split(':').map(Number);for(let value=Math.ceil((oh*60+om)/30)*30;value+30<=ch*60+cm;value+=30){const label=String(Math.floor(value/60)).padStart(2,'0')+':'+String(value%60).padStart(2,'0');if(chosen+'T'+label<=ist())continue;const option=document.createElement('option');option.value=label;option.textContent=new Date('2000-01-01T'+label+':00').toLocaleTimeString('en-IN',{hour:'numeric',minute:'2-digit'});time.append(option)}}if(time.options.length===1){placeholder.textContent='No request times on this date';result.textContent='Choose another date or call the clinic to arrange a time.'}else result.textContent=''}date.addEventListener('change',updateSlots);updateSlots();form.addEventListener('submit',async function(event){event.preventDefault();const button=this.querySelector('button');button.disabled=true;result.textContent='Sending your request…';const fields=Object.fromEntries(new FormData(this));fields.consent=this.consent.checked;fields.source=new URLSearchParams(location.search).get('utm_source')||'website';try{const response=await fetch(this.dataset.endpoint||location.pathname+'/book',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(fields)});const data=await response.json();if(!response.ok)throw new Error(data.error||'Please try again.');result.textContent='Request received. The clinic will contact you to confirm your appointment.';this.reset();updateSlots()}catch(error){result.textContent=error.message}finally{button.disabled=false}})}`;

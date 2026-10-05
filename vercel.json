@@ -1,0 +1,27 @@
+{
+  "version": 2,
+  "regions": ["sin1"],
+  "buildCommand": "npm run build",
+  "outputDirectory": "dist",
+  "functions": { "api/index.js": { "maxDuration": 300, "includeFiles": "dist/**" } },
+  "rewrites": [
+    { "source": "/api/:path*", "destination": "/api/index" },
+    { "source": "/media/:path*", "destination": "/api/index" },
+    { "source": "/c/:path*", "destination": "/api/index" },
+    { "source": "/demo", "destination": "/api/index" },
+    { "source": "/privacy", "destination": "/api/index" },
+    { "source": "/terms", "destination": "/api/index" },
+    { "source": "/sitemap.xml", "destination": "/api/index" },
+    { "source": "/robots.txt", "destination": "/api/index" },
+    { "source": "/clinic-booking.js", "destination": "/api/index" },
+    { "source": "/", "destination": "/api/index" },
+    { "source": "/app/:path*", "destination": "/index.html" },
+    { "source": "/login", "destination": "/index.html" },
+    { "source": "/register", "destination": "/index.html" },
+    { "source": "/join", "destination": "/index.html" },
+    { "source": "/verify", "destination": "/index.html" },
+    { "source": "/forgot", "destination": "/index.html" },
+    { "source": "/reset", "destination": "/index.html" }
+  ],
+  "crons": [{ "path": "/api/cron", "schedule": "*/5 * * * *" }]
+}

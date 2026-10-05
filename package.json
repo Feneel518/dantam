@@ -1,0 +1,53 @@
+{
+  "name": "dantam",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": "24.x"
+  },
+  "scripts": {
+    "dev": "node --watch-path=server server/index.js",
+    "build": "vite build",
+    "start": "node server/index.js",
+    "worker": "node server/worker.js",
+    "test": "node --test --test-concurrency=1 tests/*.test.js",
+    "demo": "node scripts/seed-demo.js && node scripts/seed-care-demo.js",
+    "check": "npm run build && npm test",
+    "test:browser": "node scripts/browser-check.js",
+    "test:landing": "node scripts/landing-check.js"
+  },
+  "dependencies": {
+    "@tailwindcss/vite": "^4.3.3",
+    "@vercel/functions": "^3.9.9",
+    "better-auth": "^1.7.7",
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
+    "cookie-parser": "^1.4.7",
+    "date-fns": "^4.4.0",
+    "dotenv": "^17.2.3",
+    "express": "^5.2.1",
+    "helmet": "^8.1.0",
+    "lucide-react": "^0.577.0",
+    "nodemailer": "^10.0.13",
+    "papaparse": "^5.7.0",
+    "pg": "^8.16.3",
+    "radix-ui": "^1.6.7",
+    "react": "^19.2.0",
+    "react-day-picker": "^10.0.2",
+    "react-dom": "^19.2.0",
+    "sharp": "^0.35.5",
+    "sonner": "^2.0.8",
+    "tailwind-merge": "^3.7.0",
+    "tailwindcss": "^4.3.3",
+    "tw-animate-css": "^1.4.0",
+    "zod": "^4.3.6"
+  },
+  "devDependencies": {
+    "@electric-sql/pglite": "^0.5.8",
+    "@vitejs/plugin-react": "^5.1.4",
+    "playwright": "^1.63.0",
+    "supertest": "^7.2.2",
+    "vite": "^7.3.1"
+  }
+}

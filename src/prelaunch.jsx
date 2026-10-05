@@ -1,0 +1,2 @@
+import React,{useEffect,useState} from 'react';
+export default function PrelaunchNotice(){const [active,setActive]=useState(false);useEffect(()=>{fetch('/api/public-config').then(r=>r.json()).then(v=>setActive(v.prelaunch)).catch(()=>{})},[]);return active?<div className="prelaunch-notice" role="status">Launch preview · Registration and payments will open after setup is complete. Please use fictional data for testing.</div>:null}

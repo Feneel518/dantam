@@ -1,0 +1,60 @@
+@layer theme, base, components, utilities;
+@import "tailwindcss/theme.css" layer(theme);
+@import "tailwindcss/utilities.css" layer(utilities);
+@import "tw-animate-css";
+@layer base {
+  [data-slot="button"], [data-slot="select-trigger"], [data-slot="dialog-close"] {
+    border: 0 solid var(--border); background-color: transparent; color: inherit; font-family: inherit; cursor: pointer;
+  }
+  [data-slot="popover-content"], [data-slot="select-content"], [data-slot="dialog-content"] { border: 0 solid var(--border); }
+}
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--foreground);
+  --color-muted: var(--secondary);
+  --color-muted-foreground: #61756e;
+  --color-accent: #e7f2ec;
+  --color-accent-foreground: var(--foreground);
+  --color-destructive: #a44131;
+  --color-border: #dce7df;
+  --color-input: #dce7df;
+  --color-ring: #488572;
+  --color-popover: #ffffff;
+  --color-popover-foreground: var(--foreground);
+  --radius-sm: 0.375rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 0.625rem;
+  --radius-xl: 0.75rem;
+}
+:root { --background: #fff; --foreground: #192b49; --primary: #2459d3; --primary-foreground: #fff; --secondary: #f0f3f9; --popover: #fff; --popover-foreground: #192b49; --border: #dce3ec; --radius: 0.625rem; }
+[data-slot="select-content"], [data-slot="popover-content"] { z-index: 120; }
+[data-slot="select-trigger"] { width: 100%; min-height: 42px; background: white; font: inherit; }
+[data-slot="calendar"] table { width: auto; }
+[data-slot="calendar"] th, [data-slot="calendar"] td { padding: 0; border: 0; }
+.shadcn-dialog-overlay { position: fixed; inset: 0; background: #14363080; backdrop-filter: blur(3px); z-index: 100; }
+.shadcn-dialog { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 110; overflow-y: auto; margin: 0; }
+.date-picker { position: relative; width: 100%; }
+.date-picker-trigger { width: 100%; justify-content: space-between; font-weight: 400; border:1px solid #dce3ec; background:white; color:var(--ink); }
+.date-time-picker { display: grid; grid-template-columns: minmax(0, 1fr) 120px; gap: 10px; }
+.date-time-picker input { min-width: 0; }
+[data-slot="dialog-close"] { background:none; border:0; }
+.field > label { display:block; margin-bottom:8px; color:var(--ink); font-size:13px; font-weight:500; }
+[data-slot="dialog-overlay"] { z-index:100; }
+[data-slot="dialog-content"].modal { z-index:110; display:block; margin:0; overflow-y:auto; }
+[data-slot="dialog-title"] { padding-right:18px; }
+[data-sonner-toaster] { z-index:200 !important; }
+[data-slot="calendar"] button { border-style:solid; }
+[data-slot="calendar"] [data-slot="button"] { border-width:0; }
+[data-slot="button"], [data-slot="popover-content"], [data-slot="select-content"] { border-color:var(--border); }
+[data-slot="calendar"] .rdp-button_previous, [data-slot="calendar"] .rdp-button_next { border:0; background:transparent; color:var(--ink); cursor:pointer; }
+.date-validation { position: absolute; bottom: 0; left: 0; width: 1px !important; height: 1px; opacity: 0; padding: 0 !important; border: 0 !important; }
+.notification-button { position: relative; }
+.notification-button .nav-count { position: absolute; top: -5px; right: -6px; min-width: 18px; background: #174e41; color: white; border-radius: 20px; font-size: 10px; }
+.notification-list { width: min(360px, calc(100vw - 32px)); }
+.notification-list button { display: block; width: 100%; text-align: left; padding: 12px 0; border: 0; border-bottom: 1px solid #e5ece7; background: none; }
+.notification-list strong, .notification-list small { display: block; }
+.notification-list small { margin-top: 5px; color: #61756e; }

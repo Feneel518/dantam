@@ -1,0 +1,7 @@
+node_modules
+data
+test-results
+releases
+.env*
+.vercel
+*.log

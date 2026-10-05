@@ -1,0 +1,45 @@
+services:
+  db:
+    image: postgres:17-alpine
+    environment:
+      POSTGRES_DB: dantam
+      POSTGRES_USER: dantam
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD}
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: [CMD-SHELL, "pg_isready -U dantam -d dantam"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    restart: unless-stopped
+  web:
+    build: .
+    env_file: .env
+    environment:
+      NODE_ENV: production
+      DATABASE_URL: postgres://dantam:${POSTGRES_PASSWORD}@db:5432/dantam
+      TRUST_PROXY: "1"
+    ports:
+      - "127.0.0.1:3000:3000"
+    depends_on:
+      db:
+        condition: service_healthy
+    restart: unless-stopped
+  worker:
+    build: .
+    command: [node, server/worker.js]
+    env_file: .env
+    environment:
+      NODE_ENV: production
+      DATABASE_URL: postgres://dantam:${POSTGRES_PASSWORD}@db:5432/dantam
+    depends_on:
+      db:
+        condition: service_healthy
+      web:
+        condition: service_healthy
+    restart: unless-stopped
+    healthcheck:
+      disable: true
+volumes:
+  postgres-data:
